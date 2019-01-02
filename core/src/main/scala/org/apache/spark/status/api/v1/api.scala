@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
 import org.apache.spark.JobExecutionStatus
+import org.apache.spark.executor.InputReadData
 
 case class ApplicationInfo private[spark](
     id: String,
@@ -63,6 +64,8 @@ class ExecutorStageSummary private[spark](
     val killedTasks : Int,
     val inputBytes : Long,
     val inputRecords : Long,
+    val inputReadTime : Long,
+    val inputReadExecId : Seq[InputReadData],
     val outputBytes : Long,
     val outputRecords : Long,
     val shuffleRead : Long,
@@ -180,6 +183,8 @@ class StageData private[spark](
 
     val inputBytes: Long,
     val inputRecords: Long,
+    val inputReadTime: Long,
+    val inputReadExecId: Seq[InputReadData],
     val outputBytes: Long,
     val outputRecords: Long,
     val shuffleReadBytes: Long,
@@ -235,7 +240,9 @@ class TaskMetrics private[spark](
 
 class InputMetrics private[spark](
     val bytesRead: Long,
-    val recordsRead: Long)
+    val recordsRead: Long,
+    val readTime: Long,
+    val readExecId: Seq[InputReadData])
 
 class OutputMetrics private[spark](
     val bytesWritten: Long,
@@ -278,7 +285,8 @@ class TaskMetricDistributions private[spark](
 
 class InputMetricDistributions private[spark](
     val bytesRead: IndexedSeq[Double],
-    val recordsRead: IndexedSeq[Double])
+    val recordsRead: IndexedSeq[Double],
+    val readTime: IndexedSeq[Double])
 
 class OutputMetricDistributions private[spark](
     val bytesWritten: IndexedSeq[Double],

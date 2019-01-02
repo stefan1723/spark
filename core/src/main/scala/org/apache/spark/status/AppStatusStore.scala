@@ -202,7 +202,8 @@ private[spark] class AppStatusStore(
         diskBytesSpilled = toValues(_.diskBytesSpilled),
         inputMetrics = new v1.InputMetricDistributions(
           toValues(_.bytesRead),
-          toValues(_.recordsRead)),
+          toValues(_.recordsRead),
+          toValues(_.readTime)),
         outputMetrics = new v1.OutputMetricDistributions(
           toValues(_.bytesWritten),
           toValues(_.recordsWritten)),
@@ -299,7 +300,8 @@ private[spark] class AppStatusStore(
       diskBytesSpilled = scanTasks(TaskIndexNames.DISK_SPILL) { t => t.diskBytesSpilled },
       inputMetrics = new v1.InputMetricDistributions(
         scanTasks(TaskIndexNames.INPUT_SIZE) { t => t.inputBytesRead },
-        scanTasks(TaskIndexNames.INPUT_RECORDS) { t => t.inputRecordsRead }),
+        scanTasks(TaskIndexNames.INPUT_RECORDS) { t => t.inputRecordsRead },
+        scanTasks(TaskIndexNames.INPUT_READ_TIME) { t => t.inputReadTime }),
       outputMetrics = new v1.OutputMetricDistributions(
         scanTasks(TaskIndexNames.OUTPUT_SIZE) { t => t.outputBytesWritten },
         scanTasks(TaskIndexNames.OUTPUT_RECORDS) { t => t.outputRecordsWritten }),
@@ -343,6 +345,7 @@ private[spark] class AppStatusStore(
 
           bytesRead = computedQuantiles.inputMetrics.bytesRead(idx),
           recordsRead = computedQuantiles.inputMetrics.recordsRead(idx),
+          readTime = computedQuantiles.inputMetrics.readTime(idx),
 
           bytesWritten = computedQuantiles.outputMetrics.bytesWritten(idx),
           recordsWritten = computedQuantiles.outputMetrics.recordsWritten(idx),
@@ -467,6 +470,8 @@ private[spark] class AppStatusStore(
       stage.failureReason,
       stage.inputBytes,
       stage.inputRecords,
+      stage.inputReadTime,
+      stage.inputReadExecId,
       stage.outputBytes,
       stage.outputRecords,
       stage.shuffleReadBytes,

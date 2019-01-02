@@ -23,6 +23,7 @@ import java.util.Date
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 
+import org.apache.spark.executor.InputReadData
 import org.apache.spark.status.KVUtils._
 import org.apache.spark.status.api.v1._
 import org.apache.spark.ui.scope._
@@ -115,6 +116,8 @@ private[spark] object TaskIndexNames {
   final val GC_TIME = "gc"
   final val GETTING_RESULT_TIME = "grt"
   final val INPUT_RECORDS = "ir"
+  final val INPUT_READ_TIME = "irt"
+  final val INPUT_READ_EXEC_ID = "irei"
   final val INPUT_SIZE = "is"
   final val LAUNCH_TIME = "lt"
   final val LOCALITY = "loc"
@@ -204,6 +207,10 @@ private[spark] class TaskDataWrapper(
     val inputBytesRead: Long,
     @KVIndexParam(value = TaskIndexNames.INPUT_RECORDS, parent = TaskIndexNames.STAGE)
     val inputRecordsRead: Long,
+    @KVIndexParam(value = TaskIndexNames.INPUT_READ_TIME, parent = TaskIndexNames.STAGE)
+    val inputReadTime: Long,
+    @KVIndexParam(value = TaskIndexNames.INPUT_READ_EXEC_ID, parent = TaskIndexNames.STAGE)
+    val inputReadExecId: Seq[InputReadData],
     @KVIndexParam(value = TaskIndexNames.OUTPUT_SIZE, parent = TaskIndexNames.STAGE)
     val outputBytesWritten: Long,
     @KVIndexParam(value = TaskIndexNames.OUTPUT_RECORDS, parent = TaskIndexNames.STAGE)
@@ -249,7 +256,9 @@ private[spark] class TaskDataWrapper(
         peakExecutionMemory,
         new InputMetrics(
           inputBytesRead,
-          inputRecordsRead),
+          inputRecordsRead,
+          inputReadTime,
+          inputReadExecId),
         new OutputMetrics(
           outputBytesWritten,
           outputRecordsWritten),
@@ -463,6 +472,7 @@ private[spark] class CachedQuantile(
 
     val bytesRead: Double,
     val recordsRead: Double,
+    val readTime: Double,
 
     val bytesWritten: Double,
     val recordsWritten: Double,

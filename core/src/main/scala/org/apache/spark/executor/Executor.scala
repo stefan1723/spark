@@ -496,6 +496,8 @@ private[spark] class Executor(
           .inc(task.metrics.inputMetrics.bytesRead)
         executorSource.METRIC_INPUT_RECORDS_READ
           .inc(task.metrics.inputMetrics.recordsRead)
+        executorSource.METRIC_INPUT_READ_TIME
+          .inc(task.metrics.inputMetrics.readTime)
         executorSource.METRIC_OUTPUT_BYTES_WRITTEN
           .inc(task.metrics.outputMetrics.bytesWritten)
         executorSource.METRIC_OUTPUT_RECORDS_WRITTEN

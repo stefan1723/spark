@@ -51,6 +51,7 @@ import org.apache.spark.rpc.RpcEnv
 import org.apache.spark.scheduler.ExecutorCacheTaskLocation
 import org.apache.spark.serializer.{SerializerInstance, SerializerManager}
 import org.apache.spark.shuffle.ShuffleManager
+import org.apache.spark.storage.BlockManagerMessages.BlockLocationsAndStatus
 import org.apache.spark.storage.memory._
 import org.apache.spark.unsafe.Platform
 import org.apache.spark.util._
@@ -58,9 +59,15 @@ import org.apache.spark.util.io.ChunkedByteBuffer
 
 /* Class for returning a fetched block and associated metrics. */
 private[spark] class BlockResult(
-    val data: Iterator[Any],
-    val readMethod: DataReadMethod.Value,
-    val bytes: Long)
+                                  val data: Iterator[Any],
+                                  val readMethod: DataReadMethod.Value,
+                                  val bytes: Long,
+                                  val dataLocationId: String)
+
+/* Class for returning a byte buffer and the location the bytes came from. */
+private[spark] class RemoteByteBuffer(
+                                  val bytes: ChunkedByteBuffer,
+                                  val dataLocationId: String)
 
 /**
  * Abstracts away how blocks are stored and provides different ways to read the underlying block
@@ -601,7 +608,7 @@ private[spark] class BlockManager(
           val ci = CompletionIterator[Any, Iterator[Any]](iter, {
             releaseLock(blockId, taskAttemptId)
           })
-          Some(new BlockResult(ci, DataReadMethod.Memory, info.size))
+          Some(new BlockResult(ci, DataReadMethod.Memory, info.size, executorId))
         } else if (level.useDisk && diskStore.contains(blockId)) {
           val diskData = diskStore.getBytes(blockId)
           val iterToReturn: Iterator[Any] = {
@@ -620,7 +627,7 @@ private[spark] class BlockManager(
           val ci = CompletionIterator[Any, Iterator[Any]](iterToReturn, {
             releaseLockAndDispose(blockId, diskData, taskAttemptId)
           })
-          Some(new BlockResult(ci, DataReadMethod.Disk, info.size))
+          Some(new BlockResult(ci, DataReadMethod.Disk, info.size, executorId))
         } else {
           handleLocalReadFailure(blockId)
         }
@@ -695,8 +702,9 @@ private[spark] class BlockManager(
     val ct = implicitly[ClassTag[T]]
     getRemoteBytes(blockId).map { data =>
       val values =
-        serializerManager.dataDeserializeStream(blockId, data.toInputStream(dispose = true))(ct)
-      new BlockResult(values, DataReadMethod.Network, data.size)
+        serializerManager.dataDeserializeStream(blockId,
+          data.bytes.toInputStream(dispose = true))(ct)
+      new BlockResult(values, DataReadMethod.Network, data.bytes.size, data.dataLocationId)
     }
   }
 
@@ -720,8 +728,8 @@ private[spark] class BlockManager(
   /**
    * Get block from remote block managers as serialized bytes.
    */
-  def getRemoteBytes(blockId: BlockId): Option[ChunkedByteBuffer] = {
-    // TODO SPARK-25905 if we change this method to return the ManagedBuffer, then getRemoteValues
+  def getRemoteBytes(blockId: BlockId): Option[RemoteByteBuffer] = {
+    // TODO if we change this method to return the ManagedBuffer, then getRemoteValues
     // could just use the inputStream on the temp file, rather than reading the file into memory.
     // Until then, replication can cause the process to use too much memory and get killed
     // even though we've read the data to disk.
@@ -793,9 +801,11 @@ private[spark] class BlockManager(
         // ChunkedByteBuffer, to go back to old code-path.  Can be removed post Spark 2.4 if
         // new path is stable.
         if (remoteReadNioBufferConversion) {
-          return Some(new ChunkedByteBuffer(data.nioByteBuffer()))
+          return Some(new RemoteByteBuffer(new ChunkedByteBuffer(data.nioByteBuffer()),
+            loc.executorId))
         } else {
-          return Some(ChunkedByteBuffer.fromManagedBuffer(data))
+          return Some(new RemoteByteBuffer(ChunkedByteBuffer.fromManagedBuffer(data),
+            loc.executorId))
         }
       }
       logDebug(s"The value of block $blockId is null")

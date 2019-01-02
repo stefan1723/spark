@@ -89,7 +89,7 @@ private[spark] class TaskResultGetter(sparkEnv: SparkEnv, scheduler: TaskSchedul
                 return
               }
               val deserializedResult = serializer.get().deserialize[DirectTaskResult[_]](
-                serializedTaskResult.get.toByteBuffer)
+                serializedTaskResult.get.bytes.toByteBuffer)
               // force deserialization of referenced value
               deserializedResult.value(taskResultSerializer.get())
               sparkEnv.blockManager.master.removeBlock(blockId)

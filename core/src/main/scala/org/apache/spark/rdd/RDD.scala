@@ -35,6 +35,7 @@ import org.apache.spark._
 import org.apache.spark.Partitioner._
 import org.apache.spark.annotation.{DeveloperApi, Experimental, Since}
 import org.apache.spark.api.java.JavaRDD
+import org.apache.spark.executor.{DataReadMethod, InputReadData}
 import org.apache.spark.internal.Logging
 import org.apache.spark.partial.BoundedDouble
 import org.apache.spark.partial.CountEvaluator
@@ -331,12 +332,19 @@ abstract class RDD[T: ClassTag](
   private[spark] def getOrCompute(partition: Partition, context: TaskContext): Iterator[T] = {
     val blockId = RDDBlockId(id, partition.index)
     var readCachedBlock = true
+    val startReadingBlock = System.currentTimeMillis()
     // This method is called on executors, so we need call SparkEnv.get instead of sc.env.
-    SparkEnv.get.blockManager.getOrElseUpdate(blockId, storageLevel, elementClassTag, () => {
-      readCachedBlock = false
-      computeOrReadCheckpoint(partition, context)
-    }) match {
+    val tmp = SparkEnv.get.blockManager.getOrElseUpdate(blockId, storageLevel, elementClassTag,
+      () => {
+        readCachedBlock = false
+        computeOrReadCheckpoint(partition, context)
+      })
+    tmp match {
       case Left(blockResult) =>
+        context.taskMetrics().inputMetrics
+          .incReadTime(System.currentTimeMillis() - startReadingBlock)
+        context.taskMetrics().inputMetrics.incReadParams(InputReadData(blockResult
+          .dataLocationId, blockResult.readMethod.toString, readCachedBlock))
         if (readCachedBlock) {
           val existingMetrics = context.taskMetrics().inputMetrics
           existingMetrics.incBytesRead(blockResult.bytes)
@@ -347,9 +355,15 @@ abstract class RDD[T: ClassTag](
             }
           }
         } else {
+          context.taskMetrics().inputMetrics
+            .incReadTime(System.currentTimeMillis() - startReadingBlock)
           new InterruptibleIterator(context, blockResult.data.asInstanceOf[Iterator[T]])
         }
       case Right(iter) =>
+        context.taskMetrics().inputMetrics
+          .incReadTime(System.currentTimeMillis() - startReadingBlock)
+        context.taskMetrics().inputMetrics.incReadParams(InputReadData("Unknown", "Drop failed.",
+          false))
         new InterruptibleIterator(context, iter.asInstanceOf[Iterator[T]])
     }
   }

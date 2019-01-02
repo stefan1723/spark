@@ -1144,7 +1144,9 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |    },
       |    "Input Metrics" : {
       |      "Bytes Read" : 0,
-      |      "Records Read" : 0
+      |      "Records Read" : 0,
+      |      "Read Time" : 0,
+      |      "Read Location" : [ ]
       |    },
       |    "Output Metrics" : {
       |      "Bytes Written" : 0,
@@ -1245,7 +1247,9 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |    },
       |    "Input Metrics": {
       |      "Bytes Read": 2100,
-      |      "Records Read": 21
+      |      "Records Read": 21,
+      |      "Read Time" : 0,
+      |      "Read Location" : [ ]
       |    },
       |     "Output Metrics" : {
       |      "Bytes Written" : 0,
@@ -1346,7 +1350,9 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |    },
       |    "Input Metrics": {
       |      "Bytes Read": 2100,
-      |      "Records Read": 21
+      |      "Records Read": 21,
+      |      "Read Time" : 0,
+      |      "Read Location" : [ ]
       |    },
       |    "Output Metrics": {
       |      "Bytes Written": 1200,
@@ -1986,20 +1992,34 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |        },
       |        {
       |          "ID": 23,
+      |          "Name": "${input.READ_TIME}",
+      |          "Update": 0,
+      |          "Internal": true,
+      |          "Count Failed Values": true
+      |        },
+      |        {
+      |          "ID": 24,
+      |          "Name": "${input.READ_EXEC_ID}",
+      |          "Update": [ ],
+      |          "Internal": true,
+      |          "Count Failed Values": true
+      |        },
+      |        {
+      |          "ID": 25,
       |          "Name": "${output.BYTES_WRITTEN}",
       |          "Update": 1200,
       |          "Internal": true,
       |          "Count Failed Values": true
       |        },
       |        {
-      |          "ID": 24,
+      |          "ID": 26,
       |          "Name": "${output.RECORDS_WRITTEN}",
       |          "Update": 12,
       |          "Internal": true,
       |          "Count Failed Values": true
       |        },
       |        {
-      |          "ID": 25,
+      |          "ID": 27,
       |          "Name": "$TEST_ACCUM",
       |          "Update": 0,
       |          "Internal": true,

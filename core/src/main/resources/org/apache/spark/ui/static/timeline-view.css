@@ -66,6 +66,11 @@ rect.shuffle-read-time-proportion {
   stroke: #D39651;
 }
 
+rect.read-time-proportion {
+  fill: #fd5ff2;
+  stroke: #d319bd;
+}
+
 rect.executor-runtime-proportion {
   fill: #B3DE69;
   stroke: #95B957;

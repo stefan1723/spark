@@ -26,7 +26,7 @@ import scala.collection.mutable.HashMap
 import com.google.common.collect.Interners
 
 import org.apache.spark.JobExecutionStatus
-import org.apache.spark.executor.TaskMetrics
+import org.apache.spark.executor.{InputReadData, TaskMetrics}
 import org.apache.spark.scheduler.{AccumulableInfo, StageInfo, TaskInfo}
 import org.apache.spark.status.api.v1
 import org.apache.spark.storage.RDDInfo
@@ -147,6 +147,8 @@ private class LiveTask(
         metrics.peakExecutionMemory,
         metrics.inputMetrics.bytesRead,
         metrics.inputMetrics.recordsRead,
+        metrics.inputMetrics.readTime,
+        metrics.inputMetrics.readParams,
         metrics.outputMetrics.bytesWritten,
         metrics.outputMetrics.recordsWritten,
         metrics.shuffleReadMetrics.remoteBlocksFetched,
@@ -208,6 +210,8 @@ private class LiveTask(
       metrics.peakExecutionMemory,
       metrics.inputMetrics.bytesRead,
       metrics.inputMetrics.recordsRead,
+      metrics.inputMetrics.readTime,
+      metrics.inputMetrics.readExecId,
       metrics.outputMetrics.bytesWritten,
       metrics.outputMetrics.recordsWritten,
       metrics.shuffleReadMetrics.remoteBlocksFetched,
@@ -330,6 +334,8 @@ private class LiveExecutorStageSummary(
       killedTasks,
       metrics.inputMetrics.bytesRead,
       metrics.inputMetrics.recordsRead,
+      metrics.inputMetrics.readTime,
+      metrics.inputMetrics.readExecId,
       metrics.outputMetrics.bytesWritten,
       metrics.outputMetrics.recordsWritten,
       metrics.shuffleReadMetrics.remoteBytesRead + metrics.shuffleReadMetrics.localBytesRead,
@@ -408,6 +414,8 @@ private class LiveStage extends LiveEntity {
 
       metrics.inputMetrics.bytesRead,
       metrics.inputMetrics.recordsRead,
+      metrics.inputMetrics.readTime,
+      metrics.inputMetrics.readExecId,
       metrics.outputMetrics.bytesWritten,
       metrics.outputMetrics.recordsWritten,
       metrics.shuffleReadMetrics.localBytesRead + metrics.shuffleReadMetrics.remoteBytesRead,
@@ -605,30 +613,32 @@ private object LiveEntityHelpers {
 
   // scalastyle:off argcount
   def createMetrics(
-      executorDeserializeTime: Long,
-      executorDeserializeCpuTime: Long,
-      executorRunTime: Long,
-      executorCpuTime: Long,
-      resultSize: Long,
-      jvmGcTime: Long,
-      resultSerializationTime: Long,
-      memoryBytesSpilled: Long,
-      diskBytesSpilled: Long,
-      peakExecutionMemory: Long,
-      inputBytesRead: Long,
-      inputRecordsRead: Long,
-      outputBytesWritten: Long,
-      outputRecordsWritten: Long,
-      shuffleRemoteBlocksFetched: Long,
-      shuffleLocalBlocksFetched: Long,
-      shuffleFetchWaitTime: Long,
-      shuffleRemoteBytesRead: Long,
-      shuffleRemoteBytesReadToDisk: Long,
-      shuffleLocalBytesRead: Long,
-      shuffleRecordsRead: Long,
-      shuffleBytesWritten: Long,
-      shuffleWriteTime: Long,
-      shuffleRecordsWritten: Long): v1.TaskMetrics = {
+                     executorDeserializeTime: Long,
+                     executorDeserializeCpuTime: Long,
+                     executorRunTime: Long,
+                     executorCpuTime: Long,
+                     resultSize: Long,
+                     jvmGcTime: Long,
+                     resultSerializationTime: Long,
+                     memoryBytesSpilled: Long,
+                     diskBytesSpilled: Long,
+                     peakExecutionMemory: Long,
+                     inputBytesRead: Long,
+                     inputRecordsRead: Long,
+                     inputReadTime: Long,
+                     inputReadExecId: Seq[InputReadData],
+                     outputBytesWritten: Long,
+                     outputRecordsWritten: Long,
+                     shuffleRemoteBlocksFetched: Long,
+                     shuffleLocalBlocksFetched: Long,
+                     shuffleFetchWaitTime: Long,
+                     shuffleRemoteBytesRead: Long,
+                     shuffleRemoteBytesReadToDisk: Long,
+                     shuffleLocalBytesRead: Long,
+                     shuffleRecordsRead: Long,
+                     shuffleBytesWritten: Long,
+                     shuffleWriteTime: Long,
+                     shuffleRecordsWritten: Long): v1.TaskMetrics = {
     new v1.TaskMetrics(
       executorDeserializeTime,
       executorDeserializeCpuTime,
@@ -642,7 +652,9 @@ private object LiveEntityHelpers {
       peakExecutionMemory,
       new v1.InputMetrics(
         inputBytesRead,
-        inputRecordsRead),
+        inputRecordsRead,
+        inputReadTime,
+        inputReadExecId),
       new v1.OutputMetrics(
         outputBytesWritten,
         outputRecordsWritten),
@@ -663,8 +675,8 @@ private object LiveEntityHelpers {
 
   def createMetrics(default: Long): v1.TaskMetrics = {
     createMetrics(default, default, default, default, default, default, default, default,
-      default, default, default, default, default, default, default, default,
-      default, default, default, default, default, default, default, default)
+      default, default, default, default, default, Seq.empty[InputReadData], default, default,
+      default, default, default, default, default, default, default, default, default, default)
   }
 
   /** Add m2 values to m1. */
@@ -689,6 +701,8 @@ private object LiveEntityHelpers {
       m1.peakExecutionMemory + m2.peakExecutionMemory * mult,
       m1.inputMetrics.bytesRead + m2.inputMetrics.bytesRead * mult,
       m1.inputMetrics.recordsRead + m2.inputMetrics.recordsRead * mult,
+      m1.inputMetrics.readTime + m2.inputMetrics.readTime * mult,
+      m1.inputMetrics.readExecId ++ m2.inputMetrics.readExecId,
       m1.outputMetrics.bytesWritten + m2.outputMetrics.bytesWritten * mult,
       m1.outputMetrics.recordsWritten + m2.outputMetrics.recordsWritten * mult,
       m1.shuffleReadMetrics.remoteBlocksFetched + m2.shuffleReadMetrics.remoteBlocksFetched * mult,

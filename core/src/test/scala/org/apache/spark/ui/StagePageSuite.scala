@@ -18,6 +18,7 @@
 package org.apache.spark.ui
 
 import java.util.Locale
+
 import javax.servlet.http.HttpServletRequest
 
 import scala.xml.Node
@@ -25,7 +26,7 @@ import scala.xml.Node
 import org.mockito.Mockito.{mock, when, RETURNS_SMART_NULLS}
 
 import org.apache.spark._
-import org.apache.spark.executor.TaskMetrics
+import org.apache.spark.executor.{InputReadData, TaskMetrics}
 import org.apache.spark.scheduler._
 import org.apache.spark.status.AppStatusStore
 import org.apache.spark.status.api.v1.{AccumulableInfo => UIAccumulableInfo, StageData, StageStatus}
@@ -60,6 +61,8 @@ class StagePageSuite extends SparkFunSuite with LocalSparkContext {
 
         inputBytes = 1L,
         inputRecords = 1L,
+        inputReadTime = 1L,
+        inputReadExecId = Seq.empty[InputReadData],
         outputBytes = 1L,
         outputRecords = 1L,
         shuffleReadBytes = 1L,
