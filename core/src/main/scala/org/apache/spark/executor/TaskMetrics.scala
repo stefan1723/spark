@@ -230,6 +230,8 @@ class TaskMetrics private[spark] () extends Serializable {
     shuffleWrite.WRITE_TIME -> shuffleWriteMetrics._writeTime,
     input.BYTES_READ -> inputMetrics._bytesRead,
     input.RECORDS_READ -> inputMetrics._recordsRead,
+    input.READ_TIME -> inputMetrics._readTime,
+    input.READ_EXEC_ID -> inputMetrics._readParams,
     output.BYTES_WRITTEN -> outputMetrics._bytesWritten,
     output.RECORDS_WRITTEN -> outputMetrics._recordsWritten
   ) ++ testAccum.map(TEST_ACCUM -> _)
@@ -299,9 +301,14 @@ private[spark] object TaskMetrics extends Logging {
       if (name == UPDATED_BLOCK_STATUSES) {
         tm.setUpdatedBlockStatuses(value.asInstanceOf[java.util.List[(BlockId, BlockStatus)]])
       } else {
-        tm.nameToAccums.get(name).foreach(
-          _.asInstanceOf[LongAccumulator].setValue(value.asInstanceOf[Long])
-        )
+        tm.nameToAccums.get(name).foreach {
+          case a: LongAccumulator =>
+            a.setValue(value.asInstanceOf[Long])
+          case v: CollectionAccumulator[_] =>
+            println("Currently not used CollectionAccumulator found")
+          case v => println("Try to get accumulator info from object with unknown type " +
+            v.getClass.getName)
+        }
       }
     }
     tm

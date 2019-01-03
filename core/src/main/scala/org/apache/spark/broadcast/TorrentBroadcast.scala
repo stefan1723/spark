@@ -172,7 +172,7 @@ private[spark] class TorrentBroadcast[T: ClassTag](obj: T, id: Long)
           bm.getRemoteBytes(pieceId) match {
             case Some(b) =>
               if (checksumEnabled) {
-                val sum = calcChecksum(b.chunks(0))
+                val sum = calcChecksum(b.bytes.chunks(0))
                 if (sum != checksums(pid)) {
                   throw new SparkException(s"corrupt remote block $pieceId of $broadcastId:" +
                     s" $sum != ${checksums(pid)}")
@@ -180,11 +180,12 @@ private[spark] class TorrentBroadcast[T: ClassTag](obj: T, id: Long)
               }
               // We found the block from remote executors/driver's BlockManager, so put the block
               // in this executor's BlockManager.
-              if (!bm.putBytes(pieceId, b, StorageLevel.MEMORY_AND_DISK_SER, tellMaster = true)) {
+              if (!bm.putBytes(pieceId, b.bytes, StorageLevel.MEMORY_AND_DISK_SER,
+                tellMaster = true)) {
                 throw new SparkException(
                   s"Failed to store $pieceId of $broadcastId in local BlockManager")
               }
-              blocks(pid) = new ByteBufferBlockData(b, true)
+              blocks(pid) = new ByteBufferBlockData(b.bytes, true)
             case None =>
               throw new SparkException(s"Failed to get $pieceId of $broadcastId")
           }

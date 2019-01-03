@@ -33,9 +33,10 @@ import scala.util.Random
 import scala.util.control.NonFatal
 
 import com.codahale.metrics.{MetricRegistry, MetricSet}
+import com.google.common.io.CountingOutputStream
 
 import org.apache.spark._
-import org.apache.spark.executor.DataReadMethod
+import org.apache.spark.executor.{DataReadMethod, ShuffleWriteMetrics}
 import org.apache.spark.internal.{config, Logging}
 import org.apache.spark.memory.{MemoryManager, MemoryMode}
 import org.apache.spark.metrics.source.Source
@@ -50,6 +51,7 @@ import org.apache.spark.rpc.RpcEnv
 import org.apache.spark.scheduler.ExecutorCacheTaskLocation
 import org.apache.spark.serializer.{SerializerInstance, SerializerManager}
 import org.apache.spark.shuffle.{ShuffleManager, ShuffleWriteMetricsReporter}
+import org.apache.spark.storage.BlockManagerMessages.BlockLocationsAndStatus
 import org.apache.spark.storage.memory._
 import org.apache.spark.unsafe.Platform
 import org.apache.spark.util._
@@ -57,9 +59,15 @@ import org.apache.spark.util.io.ChunkedByteBuffer
 
 /* Class for returning a fetched block and associated metrics. */
 private[spark] class BlockResult(
-    val data: Iterator[Any],
-    val readMethod: DataReadMethod.Value,
-    val bytes: Long)
+                                  val data: Iterator[Any],
+                                  val readMethod: DataReadMethod.Value,
+                                  val bytes: Long,
+                                  val dataLocationId: String)
+
+/* Class for returning a byte buffer and the location the bytes came from. */
+private[spark] class RemoteByteBuffer(
+                                  val bytes: ChunkedByteBuffer,
+                                  val dataLocationId: String)
 
 /**
  * Abstracts away how blocks are stored and provides different ways to read the underlying block
@@ -600,7 +608,7 @@ private[spark] class BlockManager(
           val ci = CompletionIterator[Any, Iterator[Any]](iter, {
             releaseLock(blockId, taskAttemptId)
           })
-          Some(new BlockResult(ci, DataReadMethod.Memory, info.size))
+          Some(new BlockResult(ci, DataReadMethod.Memory, info.size, executorId))
         } else if (level.useDisk && diskStore.contains(blockId)) {
           val diskData = diskStore.getBytes(blockId)
           val iterToReturn: Iterator[Any] = {
@@ -619,7 +627,7 @@ private[spark] class BlockManager(
           val ci = CompletionIterator[Any, Iterator[Any]](iterToReturn, {
             releaseLockAndDispose(blockId, diskData, taskAttemptId)
           })
-          Some(new BlockResult(ci, DataReadMethod.Disk, info.size))
+          Some(new BlockResult(ci, DataReadMethod.Disk, info.size, executorId))
         } else {
           handleLocalReadFailure(blockId)
         }
@@ -694,8 +702,8 @@ private[spark] class BlockManager(
     val ct = implicitly[ClassTag[T]]
     getRemoteManagedBuffer(blockId).map { data =>
       val values =
-        serializerManager.dataDeserializeStream(blockId, data.createInputStream())(ct)
-      new BlockResult(values, DataReadMethod.Network, data.size)
+        serializerManager.dataDeserializeStream(blockId, data._1.createInputStream())(ct)
+      new BlockResult(values, DataReadMethod.Network, data._1.size, data._2)
     }
   }
 
@@ -719,7 +727,7 @@ private[spark] class BlockManager(
   /**
    * Get block from remote block managers as a ManagedBuffer.
    */
-  private def getRemoteManagedBuffer(blockId: BlockId): Option[ManagedBuffer] = {
+  private def getRemoteManagedBuffer(blockId: BlockId): Option[(ManagedBuffer, String)] = {
     logDebug(s"Getting remote block $blockId")
     require(blockId != null, "BlockId is null")
     var runningFailureCount = 0
@@ -790,7 +798,14 @@ private[spark] class BlockManager(
         // a BlockManagerManagedBuffer. The assert here is to ensure that this holds
         // true (or the disposal is handled).
         assert(!data.isInstanceOf[BlockManagerManagedBuffer])
-        return Some(data)
+        return Some((data, loc.executorId))
+        // if (remoteReadNioBufferConversion) {
+        //   return Some(new RemoteByteBuffer(new ChunkedByteBuffer(data.nioByteBuffer()),
+        //     loc.executorId))
+        // } else {
+        //   return Some(new RemoteByteBuffer(ChunkedByteBuffer.fromManagedBuffer(data),
+        //     loc.executorId))
+        // }
       }
       logDebug(s"The value of block $blockId is null")
     }
@@ -801,15 +816,15 @@ private[spark] class BlockManager(
   /**
    * Get block from remote block managers as serialized bytes.
    */
-  def getRemoteBytes(blockId: BlockId): Option[ChunkedByteBuffer] = {
+  def getRemoteBytes(blockId: BlockId): Option[RemoteByteBuffer] = {
     getRemoteManagedBuffer(blockId).map { data =>
       // SPARK-24307 undocumented "escape-hatch" in case there are any issues in converting to
       // ChunkedByteBuffer, to go back to old code-path.  Can be removed post Spark 2.4 if
       // new path is stable.
       if (remoteReadNioBufferConversion) {
-        new ChunkedByteBuffer(data.nioByteBuffer())
+        new RemoteByteBuffer(new ChunkedByteBuffer(data._1.nioByteBuffer()), data._2)
       } else {
-        ChunkedByteBuffer.fromManagedBuffer(data)
+        new RemoteByteBuffer(ChunkedByteBuffer.fromManagedBuffer(data._1), data._2)
       }
     }
   }

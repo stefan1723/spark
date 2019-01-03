@@ -42,6 +42,25 @@ private[spark] object AppStatusUtils {
     gettingResultTime(task.launchTime.getTime(), fetchStart(task), task.duration.getOrElse(-1L))
   }
 
+  def gettingDataTime(task: TaskData): Long = {
+    if (task.taskMetrics.isDefined) {
+      task.taskMetrics.get.inputMetrics.readTime
+    }
+    else {
+      0L
+    }
+  }
+
+  def gettingDataReadMethodAndPlace(task: TaskData): String = {
+    if (task.taskMetrics.isDefined && task.taskMetrics.get.inputMetrics.readExecId.nonEmpty) {
+      task.taskMetrics.get.inputMetrics.readExecId.last.readMethod + "/" + task.taskMetrics.get
+        .inputMetrics.readExecId.last.locationExecId
+    }
+    else {
+      "No data read"
+    }
+  }
+
   def schedulerDelay(
       launchTime: Long,
       fetchStart: Long,

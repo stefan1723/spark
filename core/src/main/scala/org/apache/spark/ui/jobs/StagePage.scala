@@ -570,6 +570,8 @@ private[ui] class TaskPagedTable(
         (HEADER_GC_TIME, ""),
         (HEADER_SER_TIME, TaskDetailsClassNames.RESULT_SERIALIZATION_TIME),
         (HEADER_GETTING_RESULT_TIME, TaskDetailsClassNames.GETTING_RESULT_TIME),
+        (HEADER_GETTING_DATA_TIME, TaskDetailsClassNames.GETTING_DATA_TIME),
+        (HEADER_GETTING_DATA_READ_METHOD, TaskDetailsClassNames.GETTING_DATA_READ_METHOD),
         (HEADER_PEAK_MEM, TaskDetailsClassNames.PEAK_EXECUTION_MEMORY)) ++
         {if (hasAccumulators(stage)) Seq((HEADER_ACCUMULATORS, "")) else Nil} ++
         {if (hasInput(stage)) Seq((HEADER_INPUT_SIZE, "")) else Nil} ++
@@ -672,6 +674,12 @@ private[ui] class TaskPagedTable(
       </td>
       <td class={TaskDetailsClassNames.GETTING_RESULT_TIME}>
         {UIUtils.formatDuration(AppStatusUtils.gettingResultTime(task))}
+      </td>
+      <td class={TaskDetailsClassNames.GETTING_DATA_TIME}>
+        {UIUtils.formatDuration(AppStatusUtils.gettingDataTime(task))}
+      </td>
+      <td class={TaskDetailsClassNames.GETTING_DATA_READ_METHOD}>
+        {AppStatusUtils.gettingDataReadMethodAndPlace(task)}
       </td>
       <td class={TaskDetailsClassNames.PEAK_EXECUTION_MEMORY}>
         {formatBytes(task.taskMetrics.map(_.peakExecutionMemory))}
@@ -788,6 +796,8 @@ private[spark] object ApiHelper {
   val HEADER_GC_TIME = "GC Time"
   val HEADER_SER_TIME = "Result Serialization Time"
   val HEADER_GETTING_RESULT_TIME = "Getting Result Time"
+  val HEADER_GETTING_DATA_TIME = "Input Data Time"
+  val HEADER_GETTING_DATA_READ_METHOD = "Input Data Read Method/Location"
   val HEADER_PEAK_MEM = "Peak Execution Memory"
   val HEADER_ACCUMULATORS = "Accumulators"
   val HEADER_INPUT_SIZE = "Input Size / Records"

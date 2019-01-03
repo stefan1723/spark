@@ -17,8 +17,10 @@
 
 package org.apache.spark.executor
 
+import scala.collection.JavaConverters._
+
 import org.apache.spark.annotation.DeveloperApi
-import org.apache.spark.util.LongAccumulator
+import org.apache.spark.util.{CollectionAccumulator, LongAccumulator}
 
 
 /**
@@ -33,6 +35,14 @@ object DataReadMethod extends Enumeration with Serializable {
   val Memory, Disk, Hadoop, Network = Value
 }
 
+case class InputReadData(
+                        locationExecId: String,
+                        readMethod: String,
+                        cachedBlock: Boolean
+                        ) {
+
+}
+
 
 /**
  * :: DeveloperApi ::
@@ -42,6 +52,9 @@ object DataReadMethod extends Enumeration with Serializable {
 class InputMetrics private[spark] () extends Serializable {
   private[executor] val _bytesRead = new LongAccumulator
   private[executor] val _recordsRead = new LongAccumulator
+  private[executor] val _readTime = new LongAccumulator
+  private[executor] val _readParams = new CollectionAccumulator[InputReadData]
+  var test = ""
 
   /**
    * Total number of bytes read.
@@ -53,7 +66,28 @@ class InputMetrics private[spark] () extends Serializable {
    */
   def recordsRead: Long = _recordsRead.sum
 
+  /**
+   * Total time needed for reading
+   */
+  def readTime: Long = _readTime.sum
+
+  def readParams: Seq[InputReadData] = {
+    _readParams.value.asScala
+  }
+
   private[spark] def incBytesRead(v: Long): Unit = _bytesRead.add(v)
   private[spark] def incRecordsRead(v: Long): Unit = _recordsRead.add(v)
   private[spark] def setBytesRead(v: Long): Unit = _bytesRead.setValue(v)
+  private[spark] def incReadTime(v: Long): Unit = _readTime.add(v)
+  private[spark] def incReadParams(v: InputReadData): Unit =
+    _readParams.add(v)
+  private[spark] def setReadParams(v: java.util.List[InputReadData]): Unit =
+    _readParams.setValue(v)
+  private[spark] def setReadParams(v: Seq[InputReadData]): Unit =
+    _readParams.setValue(v.asJava)
+
+  override def toString: String = {
+    s"Bytes Read:${bytesRead}, Records Read:${recordsRead}, Read Time:${readTime}," +
+      s"Read Params:${readParams.size}"
+  }
 }

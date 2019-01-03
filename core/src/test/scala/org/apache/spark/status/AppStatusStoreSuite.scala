@@ -18,6 +18,7 @@
 package org.apache.spark.status
 
 import org.apache.spark.SparkFunSuite
+import org.apache.spark.executor.InputReadData
 import org.apache.spark.status.api.v1.TaskMetricDistributions
 import org.apache.spark.util.Distribution
 import org.apache.spark.util.kvstore._
@@ -123,9 +124,9 @@ class AppStatusStoreSuite extends SparkFunSuite {
 
   private def newTaskData(i: Int, status: String = "SUCCESS"): TaskDataWrapper = {
     new TaskDataWrapper(
-      i, i, i, i, i, i, i.toString, i.toString, status, i.toString, false, Nil, None,
+      i, i, i, i, i, i, i.toString, i.toString, i.toString, i.toString, false, Nil, None,
       i, i, i, i, i, i, i, i, i, i,
-      i, i, i, i, i, i, i, i, i, i,
-      i, i, i, i, stageId, attemptId)
+      i, i, i, Seq.empty[InputReadData], i, i, i, i, i, i, i,
+      i, i, i, i, i, stageId, attemptId)
   }
 }

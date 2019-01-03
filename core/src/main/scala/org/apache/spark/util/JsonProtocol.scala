@@ -339,12 +339,23 @@ private[spark] object JsonProtocol {
         case v: Long => JInt(v)
         // We only have 3 kind of internal accumulator types, so if it's not int or long, it must be
         // the blocks accumulator, whose type is `java.util.List[(BlockId, BlockStatus)]`
-        case v =>
-          JArray(v.asInstanceOf[java.util.List[(BlockId, BlockStatus)]].asScala.toList.map {
-            case (id, status) =>
-              ("Block ID" -> id.toString) ~
-              ("Status" -> blockStatusToJson(status))
-          })
+        // Last type should not be possible here because it should be blacklisted. Otherwise
+        // `java.util.List[InputReadData]` can be found here.
+
+        case v: java.util.List[_] =>
+          // This checks for `java.util.List[InputReadData]`
+          if (name.exists(_.contains(InternalAccumulator.INPUT_METRICS_PREFIX))) {
+            JArray(v.asInstanceOf[java.util.List[InputReadData]]
+              .asScala.toList.map {value => inputReadDataToJson(value)
+            })
+          } else {
+            JArray(v.asInstanceOf[java.util.List[(BlockId, BlockStatus)]]
+              .asScala.toList.map {
+              case (id, status) =>
+                ("Block ID" -> id.toString) ~
+                  ("Status" -> blockStatusToJson(status))
+            })
+          }
       }
     } else {
       // For all external accumulators, just use strings
@@ -367,7 +378,11 @@ private[spark] object JsonProtocol {
         ("Shuffle Records Written" -> taskMetrics.shuffleWriteMetrics.recordsWritten)
     val inputMetrics: JValue =
       ("Bytes Read" -> taskMetrics.inputMetrics.bytesRead) ~
-        ("Records Read" -> taskMetrics.inputMetrics.recordsRead)
+        ("Records Read" -> taskMetrics.inputMetrics.recordsRead) ~
+        ("Read Time" -> taskMetrics.inputMetrics.readTime) ~
+        ("Read Location" -> JArray(taskMetrics.inputMetrics.readParams.toList.map {
+          value => inputReadDataToJson(value)
+        }))
     val outputMetrics: JValue =
       ("Bytes Written" -> taskMetrics.outputMetrics.bytesWritten) ~
         ("Records Written" -> taskMetrics.outputMetrics.recordsWritten)
@@ -479,6 +494,12 @@ private[spark] object JsonProtocol {
     ("Storage Level" -> storageLevel) ~
     ("Memory Size" -> blockStatus.memSize) ~
     ("Disk Size" -> blockStatus.diskSize)
+  }
+
+  def inputReadDataToJson(inputReadData: InputReadData): JValue = {
+    ("Data Location Executor Id" -> inputReadData.locationExecId) ~
+    ("Data Read Method" -> inputReadData.readMethod.toString) ~
+    ("Block Cached" -> inputReadData.cachedBlock)
   }
 
   def executorInfoToJson(executorInfo: ExecutorInfo): JValue = {
@@ -905,6 +926,13 @@ private[spark] object JsonProtocol {
       inputMetrics.incBytesRead((inJson \ "Bytes Read").extract[Long])
       inputMetrics.incRecordsRead(
         jsonOption(inJson \ "Records Read").map(_.extract[Long]).getOrElse(0L))
+      inputMetrics.incReadTime(
+        jsonOption(inJson \ "Read Time").map(_.extract[Long]).getOrElse(0L))
+      jsonOption(inJson \ "Read Location").foreach { locations =>
+        inputMetrics.setReadParams(locations.extract[List[JValue]].map { locationJson =>
+          inputReadDataFromJson(locationJson)
+        })
+      }
     }
 
     // Updated blocks
@@ -1049,6 +1077,13 @@ private[spark] object JsonProtocol {
     val memorySize = (json \ "Memory Size").extract[Long]
     val diskSize = (json \ "Disk Size").extract[Long]
     BlockStatus(storageLevel, memorySize, diskSize)
+  }
+
+  def inputReadDataFromJson(json: JValue): InputReadData = {
+    val locationExecId = (json \ "Data Location Executor Id").extract[String]
+    val readMethod = (json \ "Data Read Method").extract[String] // Needs to be casted to type
+    val cachedBlock = (json \ "Block Cached").extract[Boolean] // Needs to be casted to type
+    InputReadData(locationExecId, readMethod, cachedBlock)
   }
 
   def executorInfoFromJson(json: JValue): ExecutorInfo = {
