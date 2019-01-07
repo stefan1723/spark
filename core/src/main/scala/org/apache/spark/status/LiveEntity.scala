@@ -147,7 +147,6 @@ private class LiveTask(
         metrics.peakExecutionMemory,
         metrics.inputMetrics.bytesRead,
         metrics.inputMetrics.recordsRead,
-        metrics.inputMetrics.readTime,
         metrics.inputMetrics.readParams,
         metrics.outputMetrics.bytesWritten,
         metrics.outputMetrics.recordsWritten,
@@ -210,7 +209,6 @@ private class LiveTask(
       metrics.peakExecutionMemory,
       metrics.inputMetrics.bytesRead,
       metrics.inputMetrics.recordsRead,
-      metrics.inputMetrics.readTime,
       metrics.inputMetrics.readExecId,
       metrics.outputMetrics.bytesWritten,
       metrics.outputMetrics.recordsWritten,
@@ -334,7 +332,6 @@ private class LiveExecutorStageSummary(
       killedTasks,
       metrics.inputMetrics.bytesRead,
       metrics.inputMetrics.recordsRead,
-      metrics.inputMetrics.readTime,
       metrics.inputMetrics.readExecId,
       metrics.outputMetrics.bytesWritten,
       metrics.outputMetrics.recordsWritten,
@@ -414,7 +411,6 @@ private class LiveStage extends LiveEntity {
 
       metrics.inputMetrics.bytesRead,
       metrics.inputMetrics.recordsRead,
-      metrics.inputMetrics.readTime,
       metrics.inputMetrics.readExecId,
       metrics.outputMetrics.bytesWritten,
       metrics.outputMetrics.recordsWritten,
@@ -625,7 +621,6 @@ private object LiveEntityHelpers {
                      peakExecutionMemory: Long,
                      inputBytesRead: Long,
                      inputRecordsRead: Long,
-                     inputReadTime: Long,
                      inputReadExecId: Seq[InputReadData],
                      outputBytesWritten: Long,
                      outputRecordsWritten: Long,
@@ -653,7 +648,6 @@ private object LiveEntityHelpers {
       new v1.InputMetrics(
         inputBytesRead,
         inputRecordsRead,
-        inputReadTime,
         inputReadExecId),
       new v1.OutputMetrics(
         outputBytesWritten,
@@ -675,7 +669,7 @@ private object LiveEntityHelpers {
 
   def createMetrics(default: Long): v1.TaskMetrics = {
     createMetrics(default, default, default, default, default, default, default, default,
-      default, default, default, default, default, Seq.empty[InputReadData], default, default,
+      default, default, default, default, Seq.empty[InputReadData], default, default,
       default, default, default, default, default, default, default, default, default, default)
   }
 
@@ -701,7 +695,6 @@ private object LiveEntityHelpers {
       m1.peakExecutionMemory + m2.peakExecutionMemory * mult,
       m1.inputMetrics.bytesRead + m2.inputMetrics.bytesRead * mult,
       m1.inputMetrics.recordsRead + m2.inputMetrics.recordsRead * mult,
-      m1.inputMetrics.readTime + m2.inputMetrics.readTime * mult,
       m1.inputMetrics.readExecId ++ m2.inputMetrics.readExecId,
       m1.outputMetrics.bytesWritten + m2.outputMetrics.bytesWritten * mult,
       m1.outputMetrics.recordsWritten + m2.outputMetrics.recordsWritten * mult,

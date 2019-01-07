@@ -167,6 +167,93 @@ private[v1] class OneApplicationResource extends AbstractApplicationResource {
     app.getOrElse(throw new NotFoundException("unknown app: " + appId))
   }
 
+  @GET
+  @Path("frame")
+  @Produces(Array(MediaType.TEXT_PLAIN))
+  def frame(): String = {
+    val app = uiRoot.getApplicationInfo(appId)
+    val jobs = withUI(_.store.jobsList(null))
+    app.getOrElse(throw new NotFoundException("unknown app: " + appId))
+//    s"Got an appdId $app.get.id and stages ${jobs.size}"
+    val jobList = withUI(_.store.jobsList(null))
+//    val jobMap = scala.collection.mutable.Map.empty[Int, JobData]
+    val stageIdToJob = scala.collection.mutable.Map.empty[Int, JobData]
+    for(job <- jobList) job.stageIds.foreach(stageId => stageIdToJob += stageId -> job)
+    val stageList = withUI(_.store.stageList(null))
+//    val stageMap = scala.collection.mutable.Map.empty[Int, StageData]
+//    for(stage <- stageList) stageMap += stage.stageId -> withUI(_.store.stageWithDetails(stage))
+    var resultCSV = "jobId,status,stageId,name,taskId,index,attempt,executorId,duration," +
+      "sojournTime,waitingTime," +
+      "taskLocality,executorDeserializeTime,executorRunTime,resultSize,jvmGcTime," +
+      "resultSerializationTime,memoryBytesSpilled,diskBytesSpilled,peakExecutionMemory," +
+      "bytesRead,recordsRead,readTime,locationExecId,readMethod,cachedBlock,bytesWritten," +
+      "recordsWritten,shuffleRemoteBlocksFetched,shuffleLocalBlocksFetched,shuffleFetchWaitTime," +
+      "remoteBytesRead,shuffleRemoteBytesReadToDisk,shuffleLocalBytesRead,shuffleRecordsRead," +
+      "shuffleBytesWritten,shuffleWriteTime,shuffleRecordsWritten\n"
+    for(stage_ <- stageList) {
+      val stage = withUI(_.store.stageWithDetails(stage_))
+      if (stage.tasks.nonEmpty) {
+        val job = stageIdToJob(stage.stageId)
+        val jobId = job.jobId
+        // If completionTime non empty, submission time also have to be non empty
+        val sojournTime = if (job.completionTime.nonEmpty) job.completionTime.get.getTime - job
+          .submissionTime.get.getTime else -1
+        for ((taskId, taskData) <- stage.tasks.get) {
+          resultCSV += s"" +
+            s"$jobId," +
+            s"${stage.status}," +
+            s"${stage.stageId}," +
+            s"${stage.name}," +
+            s"$taskId," +
+            s"${taskData.index}," +
+            s"${taskData.attempt}," +
+            s"${taskData.executorId}," +
+            s"${taskData.duration.getOrElse(-1)}," +
+            s"$sojournTime," +
+            // Could throw error
+            s"${taskData.launchTime.getTime - job.submissionTime.get.getTime}," +
+            s"${taskData.taskLocality}," +
+            s"${taskData.taskMetrics.map(_.executorDeserializeTime).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.executorRunTime).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.resultSize).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.jvmGcTime).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.resultSerializationTime).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.memoryBytesSpilled).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.diskBytesSpilled).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.peakExecutionMemory).getOrElse(-1)}," +
+            // Bytes read should be calculated from single read executions
+            s"${taskData.taskMetrics.map(_.inputMetrics.bytesRead).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.inputMetrics.recordsRead).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+              .map(_.readTime).getOrElse(-1)).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+              .map(_.locationExecId).getOrElse("Nothing read")).getOrElse("Nothing read")}," +
+            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+              .map(_.readMethod).getOrElse("")).getOrElse("")}," +
+            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+              .map(_.cachedBlock).getOrElse("false")).getOrElse("false")}," +
+            s"${taskData.taskMetrics.map(_.outputMetrics.bytesWritten).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.outputMetrics.recordsWritten).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.remoteBlocksFetched)
+              .getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.localBlocksFetched).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.fetchWaitTime).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.remoteBytesRead).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.remoteBytesReadToDisk)
+              .getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.localBytesRead).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleReadMetrics.recordsRead).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleWriteMetrics.bytesWritten).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleWriteMetrics.writeTime).getOrElse(-1)}," +
+            s"${taskData.taskMetrics.map(_.shuffleWriteMetrics.recordsWritten).getOrElse(-1)}," +
+            s"\n"
+          }
+        }
+    }
+//    s"Got some mapped date ${jobMap.size}|${stageMap.size}|${stageMap.head.toString}"
+    resultCSV
+  }
+
 }
 
 private[v1] class OneApplicationAttemptResource extends AbstractApplicationResource {

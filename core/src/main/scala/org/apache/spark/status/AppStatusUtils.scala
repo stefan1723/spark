@@ -43,12 +43,8 @@ private[spark] object AppStatusUtils {
   }
 
   def gettingDataTime(task: TaskData): Long = {
-    if (task.taskMetrics.isDefined) {
-      task.taskMetrics.get.inputMetrics.readTime
-    }
-    else {
-      0L
-    }
+    task.taskMetrics.map(_.inputMetrics.readExecId.lastOption.map(_.readTime).getOrElse(0L))
+      .getOrElse(0L)
   }
 
   def gettingDataReadMethodAndPlace(task: TaskData): String = {

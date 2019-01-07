@@ -341,29 +341,28 @@ abstract class RDD[T: ClassTag](
       })
     tmp match {
       case Left(blockResult) =>
-        context.taskMetrics().inputMetrics
-          .incReadTime(System.currentTimeMillis() - startReadingBlock)
-        context.taskMetrics().inputMetrics.incReadParams(InputReadData(blockResult
-          .dataLocationId, blockResult.readMethod.toString, readCachedBlock))
+        val readTime = System.currentTimeMillis() - startReadingBlock
+        // Because this function can gets called recursive during reading and creating
+        // RDDs and last call here shows the overall loading time, the time is set and not
+        // incremented. ReadBytes otherwise must gets incremented because all bytes
+        // from recursive reading are read
+        context.taskMetrics().inputMetrics.incBytesRead(blockResult.bytes)
+        context.taskMetrics().inputMetrics.incReadParams(InputReadData(blockResult.dataLocationId,
+          blockResult.readMethod.toString, readCachedBlock, readTime, blockResult.bytes))
         if (readCachedBlock) {
-          val existingMetrics = context.taskMetrics().inputMetrics
-          existingMetrics.incBytesRead(blockResult.bytes)
           new InterruptibleIterator[T](context, blockResult.data.asInstanceOf[Iterator[T]]) {
             override def next(): T = {
-              existingMetrics.incRecordsRead(1)
+              context.taskMetrics().inputMetrics.incRecordsRead(1)
               delegate.next()
             }
           }
         } else {
-          context.taskMetrics().inputMetrics
-            .incReadTime(System.currentTimeMillis() - startReadingBlock)
           new InterruptibleIterator(context, blockResult.data.asInstanceOf[Iterator[T]])
         }
       case Right(iter) =>
-        context.taskMetrics().inputMetrics
-          .incReadTime(System.currentTimeMillis() - startReadingBlock)
+        val readTime = System.currentTimeMillis() - startReadingBlock
         context.taskMetrics().inputMetrics.incReadParams(InputReadData("Unknown", "Drop failed.",
-          false))
+          false, readTime, -1))
         new InterruptibleIterator(context, iter.asInstanceOf[Iterator[T]])
     }
   }

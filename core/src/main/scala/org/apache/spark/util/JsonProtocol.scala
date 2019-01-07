@@ -366,7 +366,6 @@ private[spark] object JsonProtocol {
     val inputMetrics: JValue =
       ("Bytes Read" -> taskMetrics.inputMetrics.bytesRead) ~
         ("Records Read" -> taskMetrics.inputMetrics.recordsRead) ~
-        ("Read Time" -> taskMetrics.inputMetrics.readTime) ~
         ("Read Location" -> JArray(taskMetrics.inputMetrics.readParams.toList.map {
           value => inputReadDataToJson(value)
         }))
@@ -478,7 +477,9 @@ private[spark] object JsonProtocol {
   def inputReadDataToJson(inputReadData: InputReadData): JValue = {
     ("Data Location Executor Id" -> inputReadData.locationExecId) ~
     ("Data Read Method" -> inputReadData.readMethod.toString) ~
-    ("Block Cached" -> inputReadData.cachedBlock)
+    ("Block Cached" -> inputReadData.cachedBlock) ~
+    ("Read Time" -> inputReadData.readTime) ~
+    ("Bytes Read" -> inputReadData.bytesRead)
   }
 
   def executorInfoToJson(executorInfo: ExecutorInfo): JValue = {
@@ -890,8 +891,6 @@ private[spark] object JsonProtocol {
       inputMetrics.incBytesRead((inJson \ "Bytes Read").extract[Long])
       inputMetrics.incRecordsRead(
         jsonOption(inJson \ "Records Read").map(_.extract[Long]).getOrElse(0L))
-      inputMetrics.incReadTime(
-        jsonOption(inJson \ "Read Time").map(_.extract[Long]).getOrElse(0L))
       jsonOption(inJson \ "Read Location").foreach { locations =>
         inputMetrics.setReadParams(locations.extract[List[JValue]].map { locationJson =>
           inputReadDataFromJson(locationJson)
@@ -1047,7 +1046,9 @@ private[spark] object JsonProtocol {
     val locationExecId = (json \ "Data Location Executor Id").extract[String]
     val readMethod = (json \ "Data Read Method").extract[String] // Needs to be casted to type
     val cachedBlock = (json \ "Block Cached").extract[Boolean] // Needs to be casted to type
-    InputReadData(locationExecId, readMethod, cachedBlock)
+    val readTime = (json \ "Read Time").extract[Long] // Needs to be casted to type
+    val bytesRead = (json \ "Bytes Read").extract[Long] // Needs to be casted to type
+    InputReadData(locationExecId, readMethod, cachedBlock, readTime, bytesRead)
   }
 
   def executorInfoFromJson(json: JValue): ExecutorInfo = {

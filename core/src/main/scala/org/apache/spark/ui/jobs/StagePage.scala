@@ -530,7 +530,8 @@ private[ui] class StagePage(parent: StagesTab, store: AppStatusStore) extends We
           (metricsOpt.map(_.shuffleWriteMetrics.writeTime).getOrElse(0L) / 1e6).toLong
         val shuffleWriteTimeProportion = toProportion(shuffleWriteTime)
         val readTime =
-          metricsOpt.map(_.inputMetrics.readTime).getOrElse(0L)
+          metricsOpt.map(_.inputMetrics.readExecId.lastOption.map(_.readTime).getOrElse(0L))
+            .getOrElse(0L)
         val readTimeProportion = toProportion(readTime)
 
         val serializationTime = metricsOpt.map(_.resultSerializationTime).getOrElse(0L)

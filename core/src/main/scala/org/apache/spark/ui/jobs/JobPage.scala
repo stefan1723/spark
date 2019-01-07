@@ -208,7 +208,7 @@ private[ui] class JobPage(parent: JobsTab, store: AppStatusStore) extends WebUIP
           stageId,
           0, 0, 0, 0, 0, 0, 0,
           0L, 0L, None, None, None, None,
-          0L, 0L, 0L, Seq.empty[InputReadData], 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L,
+          0L, 0L, Seq.empty[InputReadData], 0L, 0L, 0L, 0L, 0L, 0L, 0L, 0L,
           "Unknown",
           None,
           "Unknown",

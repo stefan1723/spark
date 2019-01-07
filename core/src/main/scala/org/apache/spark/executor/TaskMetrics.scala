@@ -230,7 +230,6 @@ class TaskMetrics private[spark] () extends Serializable {
     shuffleWrite.WRITE_TIME -> shuffleWriteMetrics._writeTime,
     input.BYTES_READ -> inputMetrics._bytesRead,
     input.RECORDS_READ -> inputMetrics._recordsRead,
-    input.READ_TIME -> inputMetrics._readTime,
     input.READ_EXEC_ID -> inputMetrics._readParams,
     output.BYTES_WRITTEN -> outputMetrics._bytesWritten,
     output.RECORDS_WRITTEN -> outputMetrics._recordsWritten

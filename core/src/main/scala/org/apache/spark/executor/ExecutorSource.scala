@@ -131,8 +131,6 @@ class ExecutorSource(threadPool: ThreadPoolExecutor, executorId: String) extends
     metricRegistry.counter(MetricRegistry.name("bytesRead"))
   val METRIC_INPUT_RECORDS_READ =
     metricRegistry.counter(MetricRegistry.name("recordsRead"))
-  val METRIC_INPUT_READ_TIME =
-    metricRegistry.counter(MetricRegistry.name("readTime"))
   val METRIC_OUTPUT_BYTES_WRITTEN =
     metricRegistry.counter(MetricRegistry.name("bytesWritten"))
   val METRIC_OUTPUT_RECORDS_WRITTEN =

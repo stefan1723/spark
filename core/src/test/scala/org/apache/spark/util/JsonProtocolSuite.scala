@@ -1145,7 +1145,6 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |    "Input Metrics" : {
       |      "Bytes Read" : 0,
       |      "Records Read" : 0,
-      |      "Read Time" : 0,
       |      "Read Location" : [ ]
       |    },
       |    "Output Metrics" : {
@@ -1248,7 +1247,6 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |    "Input Metrics": {
       |      "Bytes Read": 2100,
       |      "Records Read": 21,
-      |      "Read Time" : 0,
       |      "Read Location" : [ ]
       |    },
       |     "Output Metrics" : {
@@ -1351,7 +1349,6 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |    "Input Metrics": {
       |      "Bytes Read": 2100,
       |      "Records Read": 21,
-      |      "Read Time" : 0,
       |      "Read Location" : [ ]
       |    },
       |    "Output Metrics": {
