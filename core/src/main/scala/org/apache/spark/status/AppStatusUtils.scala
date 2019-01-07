@@ -43,14 +43,14 @@ private[spark] object AppStatusUtils {
   }
 
   def gettingDataTime(task: TaskData): Long = {
-    task.taskMetrics.map(_.inputMetrics.readExecId.lastOption.map(_.readTime).getOrElse(0L))
+    task.taskMetrics.map(_.inputMetrics.readParams.lastOption.map(_.readTime).getOrElse(0L))
       .getOrElse(0L)
   }
 
   def gettingDataReadMethodAndPlace(task: TaskData): String = {
-    if (task.taskMetrics.isDefined && task.taskMetrics.get.inputMetrics.readExecId.nonEmpty) {
-      task.taskMetrics.get.inputMetrics.readExecId.last.readMethod + "/" + task.taskMetrics.get
-        .inputMetrics.readExecId.last.locationExecId
+    if (task.taskMetrics.isDefined && task.taskMetrics.get.inputMetrics.readParams.nonEmpty) {
+      task.taskMetrics.get.inputMetrics.readParams.last.readMethod + "/" + task.taskMetrics.get
+        .inputMetrics.readParams.last.locationExecId
     }
     else {
       "No data read"

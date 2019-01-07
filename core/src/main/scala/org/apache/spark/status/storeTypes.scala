@@ -116,7 +116,7 @@ private[spark] object TaskIndexNames {
   final val GC_TIME = "gc"
   final val GETTING_RESULT_TIME = "grt"
   final val INPUT_RECORDS = "ir"
-  final val INPUT_READ_EXEC_ID = "irei"
+  final val INPUT_READ_PARAMS = "irei"
   final val INPUT_SIZE = "is"
   final val LAUNCH_TIME = "lt"
   final val LOCALITY = "loc"
@@ -161,7 +161,7 @@ private[spark] class TaskDataWrapper(
     val index: Int,
     @KVIndexParam(value = TaskIndexNames.ATTEMPT, parent = TaskIndexNames.STAGE)
     val attempt: Int,
-    @KVIndexParam(value = TaskIndexNames.LAUNCH_TIME, parent = TaskIndexNames.STAGE)
+     @KVIndexParam(value = TaskIndexNames.LAUNCH_TIME, parent = TaskIndexNames.STAGE)
     val launchTime: Long,
     val resultFetchStart: Long,
     @KVIndexParam(value = TaskIndexNames.DURATION, parent = TaskIndexNames.STAGE)
@@ -206,8 +206,8 @@ private[spark] class TaskDataWrapper(
     val inputBytesRead: Long,
     @KVIndexParam(value = TaskIndexNames.INPUT_RECORDS, parent = TaskIndexNames.STAGE)
     val inputRecordsRead: Long,
-    @KVIndexParam(value = TaskIndexNames.INPUT_READ_EXEC_ID, parent = TaskIndexNames.STAGE)
-    val inputReadExecId: Seq[InputReadData],
+    @KVIndexParam(value = TaskIndexNames.INPUT_READ_PARAMS, parent = TaskIndexNames.STAGE)
+    val inputReadParams: Seq[InputReadData],
     @KVIndexParam(value = TaskIndexNames.OUTPUT_SIZE, parent = TaskIndexNames.STAGE)
     val outputBytesWritten: Long,
     @KVIndexParam(value = TaskIndexNames.OUTPUT_RECORDS, parent = TaskIndexNames.STAGE)
@@ -232,7 +232,6 @@ private[spark] class TaskDataWrapper(
     val shuffleWriteTime: Long,
     @KVIndexParam(value = TaskIndexNames.SHUFFLE_WRITE_RECORDS, parent = TaskIndexNames.STAGE)
     val shuffleRecordsWritten: Long,
-
     val stageId: Int,
     val stageAttemptId: Int) {
 
@@ -254,7 +253,7 @@ private[spark] class TaskDataWrapper(
         new InputMetrics(
           inputBytesRead,
           inputRecordsRead,
-          inputReadExecId),
+          inputReadParams),
         new OutputMetrics(
           outputBytesWritten,
           outputRecordsWritten),

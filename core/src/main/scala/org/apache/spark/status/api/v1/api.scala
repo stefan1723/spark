@@ -58,22 +58,22 @@ case class ApplicationAttemptInfo private[spark](
 }
 
 class ExecutorStageSummary private[spark](
-    val taskTime : Long,
-    val failedTasks : Int,
-    val succeededTasks : Int,
-    val killedTasks : Int,
-    val inputBytes : Long,
-    val inputRecords : Long,
-    val inputReadExecId : Seq[InputReadData],
-    val outputBytes : Long,
-    val outputRecords : Long,
-    val shuffleRead : Long,
-    val shuffleReadRecords : Long,
-    val shuffleWrite : Long,
-    val shuffleWriteRecords : Long,
-    val memoryBytesSpilled : Long,
-    val diskBytesSpilled : Long,
-    val isBlacklistedForStage: Boolean)
+                                           val taskTime : Long,
+                                           val failedTasks : Int,
+                                           val succeededTasks : Int,
+                                           val killedTasks : Int,
+                                           val inputBytes : Long,
+                                           val inputRecords : Long,
+                                           val inputReadParams : Seq[InputReadData],
+                                           val outputBytes : Long,
+                                           val outputRecords : Long,
+                                           val shuffleRead : Long,
+                                           val shuffleReadRecords : Long,
+                                           val shuffleWrite : Long,
+                                           val shuffleWriteRecords : Long,
+                                           val memoryBytesSpilled : Long,
+                                           val diskBytesSpilled : Long,
+                                           val isBlacklistedForStage: Boolean)
 
 class ExecutorSummary private[spark](
     val id: String,
@@ -163,45 +163,45 @@ class RDDPartitionInfo private[spark](
     val executors: Seq[String])
 
 class StageData private[spark](
-    val status: StageStatus,
-    val stageId: Int,
-    val attemptId: Int,
-    val numTasks: Int,
-    val numActiveTasks: Int,
-    val numCompleteTasks: Int,
-    val numFailedTasks: Int,
-    val numKilledTasks: Int,
-    val numCompletedIndices: Int,
+                                val status: StageStatus,
+                                val stageId: Int,
+                                val attemptId: Int,
+                                val numTasks: Int,
+                                val numActiveTasks: Int,
+                                val numCompleteTasks: Int,
+                                val numFailedTasks: Int,
+                                val numKilledTasks: Int,
+                                val numCompletedIndices: Int,
 
-    val executorRunTime: Long,
-    val executorCpuTime: Long,
-    val submissionTime: Option[Date],
-    val firstTaskLaunchedTime: Option[Date],
-    val completionTime: Option[Date],
-    val failureReason: Option[String],
+                                val executorRunTime: Long,
+                                val executorCpuTime: Long,
+                                val submissionTime: Option[Date],
+                                val firstTaskLaunchedTime: Option[Date],
+                                val completionTime: Option[Date],
+                                val failureReason: Option[String],
 
-    val inputBytes: Long,
-    val inputRecords: Long,
-    val inputReadExecId: Seq[InputReadData],
-    val outputBytes: Long,
-    val outputRecords: Long,
-    val shuffleReadBytes: Long,
-    val shuffleReadRecords: Long,
-    val shuffleWriteBytes: Long,
-    val shuffleWriteRecords: Long,
-    val memoryBytesSpilled: Long,
-    val diskBytesSpilled: Long,
+                                val inputBytes: Long,
+                                val inputRecords: Long,
+                                val inputReadParams: Seq[InputReadData],
+                                val outputBytes: Long,
+                                val outputRecords: Long,
+                                val shuffleReadBytes: Long,
+                                val shuffleReadRecords: Long,
+                                val shuffleWriteBytes: Long,
+                                val shuffleWriteRecords: Long,
+                                val memoryBytesSpilled: Long,
+                                val diskBytesSpilled: Long,
 
-    val name: String,
-    val description: Option[String],
-    val details: String,
-    val schedulingPool: String,
+                                val name: String,
+                                val description: Option[String],
+                                val details: String,
+                                val schedulingPool: String,
 
-    val rddIds: Seq[Int],
-    val accumulatorUpdates: Seq[AccumulableInfo],
-    val tasks: Option[Map[Long, TaskData]],
-    val executorSummary: Option[Map[String, ExecutorStageSummary]],
-    val killedTasksSummary: Map[String, Int])
+                                val rddIds: Seq[Int],
+                                val accumulatorUpdates: Seq[AccumulableInfo],
+                                val tasks: Option[Map[Long, TaskData]],
+                                val executorSummary: Option[Map[String, ExecutorStageSummary]],
+                                val killedTasksSummary: Map[String, Int])
 
 class TaskData private[spark](
     val taskId: Long,
@@ -239,7 +239,7 @@ class TaskMetrics private[spark](
 class InputMetrics private[spark](
     val bytesRead: Long,
     val recordsRead: Long,
-    val readExecId: Seq[InputReadData])
+    val readParams: Seq[InputReadData])
 
 class OutputMetrics private[spark](
     val bytesWritten: Long,

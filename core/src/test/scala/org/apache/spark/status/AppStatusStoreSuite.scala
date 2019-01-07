@@ -126,7 +126,7 @@ class AppStatusStoreSuite extends SparkFunSuite {
     new TaskDataWrapper(
       i, i, i, i, i, i, i.toString, i.toString, status, i.toString, false, Nil, None,
       i, i, i, i, i, i, i, i, i, i,
-      i, i, i, Seq.empty[InputReadData],
+      i, i, Seq.empty[InputReadData],
       i, i, i, i, i, i, i, i,
       i, i, i, i, stageId, attemptId)
   }

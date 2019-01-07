@@ -224,13 +224,13 @@ private[v1] class OneApplicationResource extends AbstractApplicationResource {
             // Bytes read should be calculated from single read executions
             s"${taskData.taskMetrics.map(_.inputMetrics.bytesRead).getOrElse(-1)}," +
             s"${taskData.taskMetrics.map(_.inputMetrics.recordsRead).getOrElse(-1)}," +
-            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+            s"${taskData.taskMetrics.map(_.inputMetrics.readParams.lastOption
               .map(_.readTime).getOrElse(-1)).getOrElse(-1)}," +
-            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+            s"${taskData.taskMetrics.map(_.inputMetrics.readParams.lastOption
               .map(_.locationExecId).getOrElse("Nothing read")).getOrElse("Nothing read")}," +
-            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+            s"${taskData.taskMetrics.map(_.inputMetrics.readParams.lastOption
               .map(_.readMethod).getOrElse("")).getOrElse("")}," +
-            s"${taskData.taskMetrics.map(_.inputMetrics.readExecId.lastOption
+            s"${taskData.taskMetrics.map(_.inputMetrics.readParams.lastOption
               .map(_.cachedBlock).getOrElse("false")).getOrElse("false")}," +
             s"${taskData.taskMetrics.map(_.outputMetrics.bytesWritten).getOrElse(-1)}," +
             s"${taskData.taskMetrics.map(_.outputMetrics.recordsWritten).getOrElse(-1)}," +

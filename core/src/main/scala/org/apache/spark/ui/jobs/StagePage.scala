@@ -530,7 +530,7 @@ private[ui] class StagePage(parent: StagesTab, store: AppStatusStore) extends We
           (metricsOpt.map(_.shuffleWriteMetrics.writeTime).getOrElse(0L) / 1e6).toLong
         val shuffleWriteTimeProportion = toProportion(shuffleWriteTime)
         val readTime =
-          metricsOpt.map(_.inputMetrics.readExecId.lastOption.map(_.readTime).getOrElse(0L))
+          metricsOpt.map(_.inputMetrics.readParams.lastOption.map(_.readTime).getOrElse(0L))
             .getOrElse(0L)
         val readTimeProportion = toProportion(readTime)
 
@@ -772,7 +772,6 @@ private[ui] class TaskPagedTable(
         (HEADER_GC_TIME, ""),
         (HEADER_SER_TIME, TaskDetailsClassNames.RESULT_SERIALIZATION_TIME),
         (HEADER_GETTING_RESULT_TIME, TaskDetailsClassNames.GETTING_RESULT_TIME),
-        (HEADER_GETTING_DATA_TIME, TaskDetailsClassNames.GETTING_DATA_TIME),
         (HEADER_GETTING_DATA_READ_METHOD, TaskDetailsClassNames.GETTING_DATA_READ_METHOD),
         (HEADER_PEAK_MEM, TaskDetailsClassNames.PEAK_EXECUTION_MEMORY)) ++
         {if (hasAccumulators(stage)) Seq((HEADER_ACCUMULATORS, "")) else Nil} ++
@@ -998,7 +997,6 @@ private[ui] object ApiHelper {
   val HEADER_GC_TIME = "GC Time"
   val HEADER_SER_TIME = "Result Serialization Time"
   val HEADER_GETTING_RESULT_TIME = "Getting Result Time"
-  val HEADER_GETTING_DATA_TIME = "Input Data Time"
   val HEADER_GETTING_DATA_READ_METHOD = "Input Data Read Method/Location"
   val HEADER_PEAK_MEM = "Peak Execution Memory"
   val HEADER_ACCUMULATORS = "Accumulators"

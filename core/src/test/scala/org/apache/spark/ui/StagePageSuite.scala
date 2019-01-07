@@ -18,7 +18,6 @@
 package org.apache.spark.ui
 
 import java.util.Locale
-
 import javax.servlet.http.HttpServletRequest
 
 import scala.xml.Node
@@ -61,7 +60,7 @@ class StagePageSuite extends SparkFunSuite with LocalSparkContext {
 
         inputBytes = 1L,
         inputRecords = 1L,
-        inputReadExecId = Seq.empty[InputReadData],
+        inputReadParams = Seq.empty[InputReadData],
         outputBytes = 1L,
         outputRecords = 1L,
         shuffleReadBytes = 1L,

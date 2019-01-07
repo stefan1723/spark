@@ -467,7 +467,7 @@ private[spark] class AppStatusStore(
       stage.failureReason,
       stage.inputBytes,
       stage.inputRecords,
-      stage.inputReadExecId,
+      stage.inputReadParams,
       stage.outputBytes,
       stage.outputRecords,
       stage.shuffleReadBytes,

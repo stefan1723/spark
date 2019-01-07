@@ -1989,34 +1989,27 @@ private[spark] object JsonProtocolSuite extends Assertions {
       |        },
       |        {
       |          "ID": 23,
-      |          "Name": "${input.READ_TIME}",
-      |          "Update": 0,
-      |          "Internal": true,
-      |          "Count Failed Values": true
-      |        },
-      |        {
-      |          "ID": 24,
-      |          "Name": "${input.READ_EXEC_ID}",
+      |          "Name": "${input.READ_PARAMS}",
       |          "Update": [ ],
       |          "Internal": true,
       |          "Count Failed Values": true
       |        },
       |        {
-      |          "ID": 25,
+      |          "ID": 24,
       |          "Name": "${output.BYTES_WRITTEN}",
       |          "Update": 1200,
       |          "Internal": true,
       |          "Count Failed Values": true
       |        },
       |        {
-      |          "ID": 26,
+      |          "ID": 25,
       |          "Name": "${output.RECORDS_WRITTEN}",
       |          "Update": 12,
       |          "Internal": true,
       |          "Count Failed Values": true
       |        },
       |        {
-      |          "ID": 27,
+      |          "ID": 26,
       |          "Name": "$TEST_ACCUM",
       |          "Update": 0,
       |          "Internal": true,
