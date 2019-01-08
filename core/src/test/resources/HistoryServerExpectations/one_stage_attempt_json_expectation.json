@@ -15,6 +15,55 @@
   "completionTime" : "2015-02-03T16:43:06.286GMT",
   "inputBytes" : 28000128,
   "inputRecords" : 0,
+  "inputReadParams" : [ {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  } ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,
@@ -54,7 +103,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -101,7 +157,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -148,7 +211,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -195,7 +265,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -242,7 +319,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -289,7 +373,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -336,7 +427,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -383,7 +481,14 @@
         "peakExecutionMemory" : 0,
         "inputMetrics" : {
           "bytesRead" : 3500016,
-          "recordsRead" : 0
+          "recordsRead" : 0,
+          "readParams" : [ {
+            "locationExecId" : "0",
+            "readMethod" : "Memory",
+            "cachedBlock" : false,
+            "readTime" : 6,
+            "bytesRead" : 3500016
+          } ]
         },
         "outputMetrics" : {
           "bytesWritten" : 0,
@@ -414,6 +519,55 @@
       "killedTasks" : 0,
       "inputBytes" : 28000128,
       "inputRecords" : 0,
+      "inputReadParams" : [ {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      }, {
+        "locationExecId" : "0",
+        "readMethod" : "Memory",
+        "cachedBlock" : false,
+        "readTime" : 6,
+        "bytesRead" : 3500016
+      } ],
       "outputBytes" : 0,
       "outputRecords" : 0,
       "shuffleRead" : 0,

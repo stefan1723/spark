@@ -286,7 +286,7 @@ object HistoryServer extends Logging {
     server.bind()
 
     ShutdownHookManager.addShutdownHook { () => server.stop() }
-
+    logInfo(server.toString)
     // Wait until the end of the world... or if the HistoryServer process is manually stopped
     while(true) { Thread.sleep(Int.MaxValue) }
   }

@@ -28,7 +28,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -79,7 +80,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -130,7 +132,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -181,7 +184,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -232,7 +236,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -283,7 +288,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -334,7 +340,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,
@@ -385,7 +392,8 @@
     "peakExecutionMemory" : 0,
     "inputMetrics" : {
       "bytesRead" : 0,
-      "recordsRead" : 0
+      "recordsRead" : 0,
+      "readParams" : [ ]
     },
     "outputMetrics" : {
       "bytesWritten" : 0,

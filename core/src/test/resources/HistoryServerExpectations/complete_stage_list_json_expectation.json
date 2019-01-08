@@ -15,6 +15,55 @@
   "completionTime" : "2015-02-03T16:43:07.226GMT",
   "inputBytes" : 160,
   "inputRecords" : 0,
+  "inputReadParams" : [ {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 32
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 32
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  } ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,
@@ -46,6 +95,55 @@
   "completionTime" : "2015-02-03T16:43:06.286GMT",
   "inputBytes" : 28000128,
   "inputRecords" : 0,
+  "inputReadParams" : [ {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  } ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,
@@ -77,6 +175,7 @@
   "completionTime" : "2015-02-03T16:43:04.819GMT",
   "inputBytes" : 0,
   "inputRecords" : 0,
+  "inputReadParams" : [ ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,

@@ -15,6 +15,55 @@
   "completionTime" : "2015-02-03T16:43:07.226GMT",
   "inputBytes" : 160,
   "inputRecords" : 0,
+  "inputReadParams" : [ {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 32
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 32
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Hadoop",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 16
+  } ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,
@@ -47,6 +96,7 @@
   "failureReason" : "Job aborted due to stage failure: Task 3 in stage 2.0 failed 1 times, most recent failure: Lost task 3.0 in stage 2.0 (TID 19, localhost): java.lang.RuntimeException: got a 3, failing\n\tat $line11.$read$$iwC$$iwC$$iwC$$iwC$$anonfun$1.apply(<console>:18)\n\tat $line11.$read$$iwC$$iwC$$iwC$$iwC$$anonfun$1.apply(<console>:17)\n\tat scala.collection.Iterator$$anon$11.next(Iterator.scala:328)\n\tat org.apache.spark.util.Utils$.getIteratorSize(Utils.scala:1311)\n\tat org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:910)\n\tat org.apache.spark.rdd.RDD$$anonfun$count$1.apply(RDD.scala:910)\n\tat org.apache.spark.SparkContext$$anonfun$runJob$4.apply(SparkContext.scala:1314)\n\tat org.apache.spark.SparkContext$$anonfun$runJob$4.apply(SparkContext.scala:1314)\n\tat org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:61)\n\tat org.apache.spark.scheduler.Task.run(Task.scala:56)\n\tat org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:196)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:615)\n\tat java.lang.Thread.run(Thread.java:745)\n\nDriver stacktrace:",
   "inputBytes" : 0,
   "inputRecords" : 0,
+  "inputReadParams" : [ ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,
@@ -78,6 +128,55 @@
   "completionTime" : "2015-02-03T16:43:06.286GMT",
   "inputBytes" : 28000128,
   "inputRecords" : 0,
+  "inputReadParams" : [ {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  }, {
+    "locationExecId" : "0",
+    "readMethod" : "Memory",
+    "cachedBlock" : false,
+    "readTime" : 6,
+    "bytesRead" : 3500016
+  } ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,
@@ -109,6 +208,7 @@
   "completionTime" : "2015-02-03T16:43:04.819GMT",
   "inputBytes" : 0,
   "inputRecords" : 0,
+  "inputReadParams" : [ ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,

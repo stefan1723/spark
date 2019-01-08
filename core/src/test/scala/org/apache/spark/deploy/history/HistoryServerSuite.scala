@@ -81,14 +81,14 @@ class HistoryServerSuite extends SparkFunSuite with BeforeAndAfter with Matchers
       .set("spark.history.fs.logDirectory", logDir)
       .set("spark.history.fs.update.interval", "0")
       .set("spark.testing", "true")
-      .set(LOCAL_STORE_DIR, storeDir.getAbsolutePath())
+//      .set(LOCAL_STORE_DIR, storeDir.getAbsolutePath())
     conf.setAll(extraConf)
     provider = new FsHistoryProvider(conf)
     provider.checkForLogs()
     val securityManager = HistoryServer.createSecurityManager(conf)
 
-    server = new HistoryServer(conf, provider, securityManager, 18080)
-    server.initialize()
+    server = new HistoryServer(conf, provider, securityManager, 18081)
+//    server.initialize()
     server.bind()
     port = server.boundPort
   }

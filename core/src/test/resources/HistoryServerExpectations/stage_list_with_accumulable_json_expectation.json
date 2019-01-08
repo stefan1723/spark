@@ -15,6 +15,7 @@
   "completionTime" : "2015-03-16T19:25:36.579GMT",
   "inputBytes" : 0,
   "inputRecords" : 0,
+  "inputReadParams" : [ ],
   "outputBytes" : 0,
   "outputRecords" : 0,
   "shuffleReadBytes" : 0,

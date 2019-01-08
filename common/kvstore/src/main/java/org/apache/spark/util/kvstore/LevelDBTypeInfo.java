@@ -457,7 +457,6 @@ class LevelDBTypeInfo {
      */
     byte[] toKey(Object value, byte prefix) {
       final byte[] result;
-
       if (value instanceof String) {
         byte[] str = ((String) value).getBytes(UTF_8);
         result = new byte[str.length + 1];

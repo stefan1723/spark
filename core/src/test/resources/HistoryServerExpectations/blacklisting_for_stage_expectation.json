@@ -15,6 +15,7 @@
   "completionTime": "2018-01-09T10:21:19.062GMT",
   "inputBytes": 0,
   "inputRecords": 0,
+  "inputReadParams": [],
   "outputBytes": 0,
   "outputRecords": 0,
   "shuffleReadBytes": 0,
@@ -58,7 +59,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -71,7 +73,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 0,
@@ -105,7 +107,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -118,7 +121,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -152,7 +155,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -165,7 +169,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -199,7 +203,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -212,7 +217,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -246,7 +251,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -259,7 +265,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -293,7 +299,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -306,7 +313,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -341,7 +348,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -354,7 +362,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 0,
@@ -388,7 +396,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -401,7 +410,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -435,7 +444,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -448,7 +458,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -482,7 +492,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -495,7 +506,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -529,7 +540,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -542,7 +554,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -576,7 +588,8 @@
         "peakExecutionMemory": 0,
         "inputMetrics": {
           "bytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0,
+          "readParams" : [ ]
         },
         "outputMetrics": {
           "bytesWritten": 0,
@@ -589,7 +602,7 @@
           "remoteBytesRead": 0,
           "remoteBytesReadToDisk": 0,
           "localBytesRead": 0,
-          "recordsRead": 0
+          "recordsRead" : 0
         },
         "shuffleWriteMetrics": {
           "bytesWritten": 46,
@@ -607,6 +620,7 @@
       "killedTasks": 0,
       "inputBytes": 0,
       "inputRecords": 0,
+      "inputReadParams": [],
       "outputBytes": 0,
       "outputRecords": 0,
       "shuffleRead": 0,
@@ -624,6 +638,7 @@
       "killedTasks": 0,
       "inputBytes": 0,
       "inputRecords": 0,
+      "inputReadParams": [],
       "outputBytes": 0,
       "outputRecords": 0,
       "shuffleRead": 0,
