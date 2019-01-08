@@ -134,6 +134,7 @@ $(document).ready(function() {
           attempt["lastUpdated"] = formatTimeMillis(attempt["lastUpdatedEpoch"]);
           attempt["log"] = uiRoot + "/api/v1/applications/" + id + "/" +
             (attempt.hasOwnProperty("attemptId") ? attempt["attemptId"] + "/" : "") + "logs";
+          attempt["csv"] = uiRoot + "/api/v1/applications/" + id + "/" + "csv";
           attempt["durationMillisec"] = attempt["duration"];
           attempt["duration"] = formatDuration(attempt["duration"]);
           var app_clone = {"id" : id, "name" : name, "num" : num, "attempts" : [attempt]};
@@ -170,6 +171,7 @@ $(document).ready(function() {
             {name: 'user'},
             {name: 'lastUpdated'},
             {name: 'eventLog'},
+            {name: 'csvFile'},
           ],
           "autoWidth": false,
         };

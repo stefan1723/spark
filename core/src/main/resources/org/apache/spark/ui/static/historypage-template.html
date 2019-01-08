@@ -68,6 +68,12 @@
           Event Log
         </span>
       </th>
+      <th>
+        <span data-toggle="tooltip" data-placement="top"
+              title="Download the task metrics as csv file">
+          CSV File
+        </span>
+      </th>
   </thead>
   <tbody>
   {{#applications}}
@@ -86,6 +92,7 @@
       <td>{{sparkUser}}</td>
       <td>{{lastUpdated}}</td>
       <td><a href="{{log}}" class="btn btn-info btn-mini">Download</a></td>
+      <td><a href="{{csv}}" class="btn btn-info btn-mini">Download</a></td>
       {{/attempts}}
     </tr>
   {{/applications}}

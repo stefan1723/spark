@@ -17,8 +17,9 @@
 package org.apache.spark.status.api.v1
 
 import java.io.OutputStream
+import java.nio.charset.Charset
 import java.util.{List => JList}
-import java.util.zip.ZipOutputStream
+import java.util.zip.{ZipEntry, ZipOutputStream}
 import javax.ws.rs._
 import javax.ws.rs.core.{MediaType, Response, StreamingOutput}
 
@@ -168,9 +169,9 @@ private[v1] class OneApplicationResource extends AbstractApplicationResource {
   }
 
   @GET
-  @Path("frame")
-  @Produces(Array(MediaType.TEXT_PLAIN))
-  def frame(): String = {
+  @Path("csv")
+  @Produces(Array(MediaType.APPLICATION_OCTET_STREAM))
+  def frame(): Response = {
     val app = uiRoot.getApplicationInfo(appId)
     val jobs = withUI(_.store.jobsList(null))
     app.getOrElse(throw new NotFoundException("unknown app: " + appId))
@@ -250,8 +251,31 @@ private[v1] class OneApplicationResource extends AbstractApplicationResource {
           }
         }
     }
+    try {
+      val fileName = s"eventLogs-$appId.zip"
+      val stream = new StreamingOutput {
+        override def write(output: OutputStream): Unit = {
+          val zipStream = new ZipOutputStream(output)
+          try {
+            zipStream.putNextEntry(new ZipEntry(s"$appId.csv"))
+            zipStream.write(resultCSV.getBytes(Charset.forName("UTF-8")))
+          } finally {
+            zipStream.close()
+          }
+
+        }
+      }
+
+      Response.ok(stream)
+        .header("Content-Disposition", s"attachment; filename=$fileName")
+        .header("Content-Type", MediaType.APPLICATION_OCTET_STREAM)
+        .build()
+    } catch {
+      case NonFatal(_) =>
+        throw new ServiceUnavailable(s"Event logs are not available for app: $appId.")
+    }
 //    s"Got some mapped date ${jobMap.size}|${stageMap.size}|${stageMap.head.toString}"
-    resultCSV
+//    resultCSV
   }
 
 }
